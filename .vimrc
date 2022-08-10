@@ -1,3 +1,7 @@
+################################################################
+1st - Install vim plug -> https://github.com/junegunn/vim-plug
+################################################################
+
 "Barra con numero
 set number
 "Interactuar con el mouse ignorando el numero de linea
@@ -35,19 +39,15 @@ set cursorline
 " Pra hacer copi and paste respetando las tabulaciones,etc
 set paste
 
-" Instalador de plug
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 
-Plug 'morhetz/gruvbox'
-
+"molokai theme plugin
+Plug'tomasr/molokai'
+let g:molokai_original = 1
+let g:rehash256 = 1
 call plug#end()
 
 colorscheme molokai
-let g:molokai_original = 1
-
-
-
-
 
 
 
