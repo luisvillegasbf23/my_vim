@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# 1. Install Vim
+echo "Installing Vim..."
+sudo apt update
+sudo apt install -y vim
+
+# 2. Install vim-plug
+echo "Installing vim-plug..."
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# 3. Clone the Vim configurations repository
+echo "Cloning Vim configurations..."
+git clone https://github.com/tu_usuario/my_vim.git ~/.vim
+
+# 4. Create symbolic links for .vimrc from configs folder
+echo "Creating symbolic link for .vimrc from configs folder..."
+ln -sf ~/.vim/configs/.vimrc ~/.vimrc
+
+# 5. Copy additional configurations
+echo "Copying additional configurations..."
+cp -r ~/.vim/configs/* ~/.vim
+
+# 6. Install plugins using vim-plug
+echo "Installing Vim plugins..."
+vim +PlugInstall +qall
+
+echo "Vim configuration completed."
+
