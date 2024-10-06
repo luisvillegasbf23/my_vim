@@ -10,10 +10,13 @@ echo "Installing vim-plug..."
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# 3. Remove existing .vim directory if exists
-if [ -d "~/.vim" ]; then
-    echo "Removing existing ~/.vim directory..."
-    rm -rf ~/.vim
+# 3. Check if ~/.vim exists and is not empty
+if [ -d ~/.vim ] && [ "$(ls -A ~/.vim)" ]; then
+    echo "Directory ~/.vim already exists and is not empty."
+    echo "Backing up existing ~/.vim to ~/.vim_backup..."
+    mv ~/.vim ~/.vim_backup
+else
+    echo "No existing ~/.vim directory found or it's empty."
 fi
 
 # 4. Clone the Vim configurations repository
@@ -25,7 +28,7 @@ echo "Creating symbolic link for .vimrc from configs folder..."
 ln -sf ~/.vim/configs/.vimrc ~/.vimrc
 
 # 6. Copy additional configurations
-if [ -d "~/.vim/configs" ]; then
+if [ -d ~/.vim/configs ]; then
     echo "Copying additional configurations..."
     cp -r ~/.vim/configs/* ~/.vim
 else
