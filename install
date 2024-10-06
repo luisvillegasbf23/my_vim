@@ -1,43 +1,38 @@
 #!/bin/bash
 
-# 1. Install Vim
 echo "Installing Vim..."
-sudo apt update
-sudo apt install -y vim
 
-# 2. Install vim-plug
+# Install Vim if not already installed
+sudo apt update
+sudo apt install vim -y
+
 echo "Installing vim-plug..."
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+
+# Install vim-plug
+curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# 3. Check if ~/.vim exists and is not empty
-if [ -d ~/.vim ] && [ "$(ls -A ~/.vim)" ]; then
+# Check if .vim already exists
+if [ -d "$HOME/.vim" ]; then
     echo "Directory ~/.vim already exists and is not empty."
     echo "Backing up existing ~/.vim to ~/.vim_backup..."
-    mv ~/.vim ~/.vim_backup
-else
-    echo "No existing ~/.vim directory found or it's empty."
+    mv "$HOME/.vim" "$HOME/.vim_backup"
 fi
 
-# 4. Clone the Vim configurations repository
+# Clone the repository to ~/.vim
 echo "Cloning Vim configurations..."
-git clone https://github.com/luisvillegasbf23/my_vim.git ~/.vim
+git clone https://github.com/luisvillegasbf23/my_vim.git "$HOME/.vim"
 
-# 5. Create symbolic links for .vimrc from configs folder
+# Create a symbolic link for .vimrc from configs folder
 echo "Creating symbolic link for .vimrc from configs folder..."
-ln -sf ~/.vim/configs/.vimrc ~/.vimrc
+ln -sf "$HOME/.vim/configs/.vimrc" "$HOME/.vimrc"
 
-# 6. Copy additional configurations
-if [ -d ~/.vim/configs ]; then
-    echo "Copying additional configurations..."
-    cp -r ~/.vim/configs/* ~/.vim
-else
-    echo "No additional configs found in ~/.vim/configs."
-fi
+# Copy additional configurations
+echo "Copying additional configurations..."
+cp -r "$HOME/.vim/configs/.vim" "$HOME/.vim"
 
-# 7. Install plugins using vim-plug
 echo "Installing Vim plugins..."
-vim -E -s +PlugInstall +qall
+vim +PlugInstall +qall
 
 echo "Vim configuration completed."
 
