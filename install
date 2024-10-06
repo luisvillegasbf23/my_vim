@@ -10,21 +10,31 @@ echo "Installing vim-plug..."
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# 3. Clone the Vim configurations repository
-echo "Cloning Vim configurations..."
-git clone https://github.com/tu_usuario/my_vim.git ~/.vim
+# 3. Remove existing .vim directory if exists
+if [ -d "~/.vim" ]; then
+    echo "Removing existing ~/.vim directory..."
+    rm -rf ~/.vim
+fi
 
-# 4. Create symbolic links for .vimrc from configs folder
+# 4. Clone the Vim configurations repository
+echo "Cloning Vim configurations..."
+git clone https://github.com/luisvillegasbf23/my_vim.git ~/.vim
+
+# 5. Create symbolic links for .vimrc from configs folder
 echo "Creating symbolic link for .vimrc from configs folder..."
 ln -sf ~/.vim/configs/.vimrc ~/.vimrc
 
-# 5. Copy additional configurations
-echo "Copying additional configurations..."
-cp -r ~/.vim/configs/* ~/.vim
+# 6. Copy additional configurations
+if [ -d "~/.vim/configs" ]; then
+    echo "Copying additional configurations..."
+    cp -r ~/.vim/configs/* ~/.vim
+else
+    echo "No additional configs found in ~/.vim/configs."
+fi
 
-# 6. Install plugins using vim-plug
+# 7. Install plugins using vim-plug
 echo "Installing Vim plugins..."
-vim +PlugInstall +qall
+vim -E -s +PlugInstall +qall
 
 echo "Vim configuration completed."
 
