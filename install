@@ -12,24 +12,38 @@ echo "Installing vim-plug..."
 curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# Check if .vim already exists
+# Backup existing .vim directory if it exists
 if [ -d "$HOME/.vim" ]; then
-    echo "Directory ~/.vim already exists and is not empty."
+    echo "Directory ~/.vim already exists."
+    if [ ! -d "$HOME/.vim_backup" ]; then
+        echo "Creating backup directory ~/.vim_backup..."
+        mkdir "$HOME/.vim_backup"
+    fi
     echo "Backing up existing ~/.vim to ~/.vim_backup..."
-    mv "$HOME/.vim" "$HOME/.vim_backup"
+    mv "$HOME/.vim" "$HOME/.vim_backup/.vim_$(date +%Y%m%d%H%M%S)"
 fi
 
-# Clone the repository to ~/.vim
-echo "Cloning Vim configurations..."
-git clone https://github.com/luisvillegasbf23/my_vim.git "$HOME/.vim"
+# Clone the repository only if .vim directory does not exist
+if [ ! -d "$HOME/.vim" ]; then
+    echo "Cloning Vim configurations..."
+    git clone https://github.com/luisvillegasbf23/my_vim.git "$HOME/.vim"
+fi
 
-# Create a symbolic link for .vimrc from configs folder
-echo "Creating symbolic link for .vimrc from configs folder..."
-ln -sf "$HOME/.vim/configs/.vimrc" "$HOME/.vimrc"
+# Create a symbolic link for .vimrc from configs folder if the repository was cloned
+if [ -f "$HOME/.vim/configs/.vimrc" ]; then
+    echo "Creating symbolic link for .vimrc from configs folder..."
+    ln -sf "$HOME/.vim/configs/.vimrc" "$HOME/.vimrc"
+else
+    echo "No .vimrc file found in the configs folder."
+fi
 
-# Copy additional configurations
-echo "Copying additional configurations..."
-cp -r "$HOME/.vim/configs/.vim" "$HOME/.vim"
+# Copy additional configurations if available
+if [ -d "$HOME/.vim/configs" ]; then
+    echo "Copying additional configurations..."
+    cp -r "$HOME/.vim/configs/.vim" "$HOME/.vim"
+else
+    echo "No additional configurations found to copy."
+fi
 
 echo "Installing Vim plugins..."
 vim +PlugInstall +qall
